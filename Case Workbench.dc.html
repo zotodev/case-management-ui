@@ -40,68 +40,16 @@ select{appearance:none}
 </helmet>
 <div style="min-height:100vh;background:var(--bg)">
 
-  <div ref="{{ headerRef }}" style="position:sticky;top:0;z-index:40;background:var(--bg);padding:14px 20px 0;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)">
+  <div ref="{{ headerRef }}" style="position:sticky;top:0;z-index:40;background:var(--bg);padding:14px 20px 0;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line)">
 
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column">
-      <div style="padding:10px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)">
-      <button onClick="{{ onBack }}" style="display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px 0 9px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M9.5 3.5 5 8l4.5 4.5"></path></svg>
-        Back
-      </button>
-      <div style="width:1px;height:20px;background:var(--border)"></div>
-      
-      
-      <div style="display:flex;align-items:center;gap:22px">
-        <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
-          <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ createdBy }}</div>
-          <div style="font-size:11px;color:var(--text-faint)">created {{ createdAt }}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
-          <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ updatedBy }}</div>
-          <div style="font-size:11px;color:var(--text-faint)">updated {{ updatedAt }}</div>
-        </div>
-      </div>
-      <div style="flex:1"></div>
-      <div style="display:flex;align-items:center;gap:8px">
-        
-        <sc-for list="{{ actions }}" as="a" hint-placeholder-count="2">
-          <sc-if value="{{ a.isGhost }}" hint-placeholder-val="{{ true }}">
-            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 13px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">{{ a.label }}</button>
-          </sc-if>
-          <sc-if value="{{ a.isDanger }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 13px;background:transparent;border:1px solid var(--danger-border);border-radius:4px;color:var(--danger-fg);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--danger-hover-bg);border-color:var(--danger-hover-border);color:var(--danger-hover-fg)">{{ a.label }}</button>
-          </sc-if>
-          <sc-if value="{{ a.isPrimary }}" hint-placeholder-val="{{ false }}">
-            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 14px;background:var(--text);border:1px solid var(--text);border-radius:4px;color:var(--bg);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:var(--text-2);border-color:var(--text-2)">{{ a.label }}</button><div style="position:relative">
-              <button onClick="{{ toggleMore }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-dim);cursor:pointer" style-hover="background:var(--hover);color:var(--text);border-color:var(--border-strong)" title="More">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"></circle><circle cx="8" cy="8" r="1.2"></circle><circle cx="13" cy="8" r="1.2"></circle></svg>
-              </button>
-              <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
-                <div style="position:absolute;top:38px;right:0;z-index:60;width:200px;background:var(--pop);border:1px solid var(--border3);border-radius:6px;padding:4px;box-shadow:0 12px 32px var(--shadow)">
-                  <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="3.4"></circle><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1"></path></svg>
-                    {{ themeLabel }}
-                  </button>
-                  <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="2.5" width="7" height="7" rx="1"></rect><path d="M6.5 6.5h7v7h-7z"></path></svg>
-                    Copy case link
-                  </button>
-                  <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
-                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4.5 6V2.5h7V6M4.5 11.5h7V14h-7z"></path><rect x="2.5" y="6" width="11" height="5.5" rx="1"></rect></svg>
-                    Print summary
-                  </button>
-                </div>
-              </sc-if>
-            </div>
-          </sc-if>
-        </sc-for>
-      </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 16px;display:flex;align-items:center;gap:14px">
+      <div title="Case" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);flex:none">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="5" width="13" height="8.5" rx="1.2"></rect><path d="M5.5 5V3.6a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V5"></path><path d="M1.5 8.8h13"></path><path d="M7 8.3h2v1.4H7z"></path></svg>
       </div>
 
-      <div style="padding: 15px 16px 16px; display: flex; align-items: flex-start; gap: 20px; padding-top: 10px; padding-right: 10px; padding-left: 10px; padding-bottom: 10px">
-      <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:5px">
+      <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:3px">
         <div style="display:flex;align-items:center;gap:9px">
-          <span style="font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text)">{{ caseId }}</span>
+          <span style="font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:17px;font-weight:500;letter-spacing:-.01em;color:var(--text)">{{ caseId }}</span>
           <span style="font-size:13px;color:var(--text-faint)">—</span>
           <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
             <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#fbbf24">
@@ -114,27 +62,49 @@ select{appearance:none}
             </span>
           </sc-if>
         </div>
-        <div style="font-size:12.5px;line-height:1.5;color:var(--text-dim);max-width:70ch;text-wrap:pretty">{{ caseDescription }}</div>
+        <div style="font-size:12px;line-height:1.4;color:var(--text-dim);max-width:70ch;text-wrap:pretty">{{ caseDescription }}</div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:7px;position:relative">
-        <button onClick="{{ toggleMenu }}" style="display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 9px;background:var(--field);border:1px solid var(--border3);border-radius:4px;cursor:pointer" style-hover="border-color:var(--border-strong)">
+
+      <div style="display:flex;align-items:center;gap:20px;flex:none">
+        <div style="display:flex;align-items:center;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+            <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ createdBy }}</div>
+            <div style="font-size:11px;color:var(--text-faint)">created {{ createdAt }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+            <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ updatedBy }}</div>
+            <div style="font-size:11px;color:var(--text-faint)">updated {{ updatedAt }}</div>
+          </div>
+        </div>
+
+        <div style="width:1px;height:28px;background:var(--border)"></div>
+
+        <div style="display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 9px;background:var(--field);border:1px solid var(--border3);border-radius:4px">
           <span style="width:6px;height:6px;border-radius:50%;background: {{ statusColor }}"></span>
           <span style="font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.01em">{{ statusLabel }}</span>
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.6"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
-        </button>
-        
-        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;top:34px;right:0;z-index:60;width:210px;background:var(--pop);border:1px solid var(--border3);border-radius:6px;padding:4px;box-shadow:0 12px 32px var(--shadow)">
-            <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:6px 8px 5px">Set status</div>
-            <sc-for list="{{ statusOptions }}" as="s" hint-placeholder-count="5">
-              <button onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
-                <span style="width:6px;height:6px;border-radius:50%;background: {{ s.color }}"></span>
-                {{ s.label }}
+        </div>
+
+        <div style="position:relative">
+          <button onClick="{{ toggleMore }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-dim);cursor:pointer" style-hover="background:var(--hover);color:var(--text);border-color:var(--border-strong)" title="More">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"></circle><circle cx="8" cy="8" r="1.2"></circle><circle cx="13" cy="8" r="1.2"></circle></svg>
+          </button>
+          <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:38px;right:0;z-index:60;width:200px;background:var(--pop);border:1px solid var(--border3);border-radius:6px;padding:4px;box-shadow:0 12px 32px var(--shadow)">
+              <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="3.4"></circle><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1"></path></svg>
+                {{ themeLabel }}
               </button>
-            </sc-for>
-          </div>
-        </sc-if>
-      </div>
+              <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="2.5" width="7" height="7" rx="1"></rect><path d="M6.5 6.5h7v7h-7z"></path></svg>
+                Copy case link
+              </button>
+              <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4.5 6V2.5h7V6M4.5 11.5h7V14h-7z"></path><rect x="2.5" y="6" width="11" height="5.5" rx="1"></rect></svg>
+                Print summary
+              </button>
+            </div>
+          </sc-if>
+        </div>
       </div>
     </div>
 
@@ -228,6 +198,20 @@ select{appearance:none}
                 </sc-for>
               </div>
             </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 16px">
+            <sc-for list="{{ actions }}" as="a" hint-placeholder-count="2">
+              <sc-if value="{{ a.isGhost }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ a.onClick }}" style="height:34px;padding:0 15px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">{{ a.label }}</button>
+              </sc-if>
+              <sc-if value="{{ a.isDanger }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ a.onClick }}" style="height:34px;padding:0 15px;background:transparent;border:1px solid var(--danger-border);border-radius:4px;color:var(--danger-fg);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--danger-hover-bg);border-color:var(--danger-hover-border);color:var(--danger-hover-fg)">{{ a.label }}</button>
+              </sc-if>
+              <sc-if value="{{ a.isPrimary }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ a.onClick }}" style="height:34px;padding:0 16px;background:var(--text);border:1px solid var(--text);border-radius:4px;color:var(--bg);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:var(--text-2);border-color:var(--text-2)">{{ a.label }}</button>
+              </sc-if>
+            </sc-for>
           </div>
         </div>
       </sc-if>
@@ -324,22 +308,20 @@ select{appearance:none}
                 <button style="height:32px;background:transparent;border:1px dashed var(--border3);border-radius:4px;color:var(--text-dim);font-size:12.5px;cursor:pointer" style-hover="border-color:var(--text-faint);color:var(--text)">Upload file</button>
               </div>
             </sc-if>
-            <sc-if value="{{ isComments }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;flex-direction:column;gap:12px">
-                <sc-for list="{{ comments }}" as="c" hint-placeholder-count="3">
-                  <div style="display:flex;flex-direction:column;gap:5px">
-                    <div style="display:flex;align-items:baseline;gap:8px">
-                      <span style="font-size:12px;font-weight:600;color:var(--text)">{{ c.author }}</span>
-                      <span style="font-size:10.5px;color:var(--text-faint);font-family:'Geist Mono',ui-monospace,monospace">{{ c.ts }}</span>
+            <sc-if value="{{ isCoverage }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ coverage }}" as="g" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--field);border:1px solid var(--border);border-radius:4px">
+                    <span style="width:28px;height:28px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:4px;background:var(--line2);font-size:11px;font-weight:600;color:var(--text-2)">{{ g.initials }}</span>
+                    <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:12.5px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.name }}</span>
+                      <span style="font-size:11px;color:var(--text-faint)">{{ g.role }}</span>
                     </div>
-                    <div style="font-size:12.5px;line-height:1.6;color:var(--text-dim);background:var(--field);border:1px solid var(--border);border-radius:4px;padding:9px 10px;text-wrap:pretty">{{ c.body }}</div>
                   </div>
                 </sc-for>
-                <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px solid var(--line2)">
-                  <textarea placeholder="Add a comment" rows="3" style="padding:9px 10px;background:var(--field);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:12.5px;line-height:1.6;outline:none;resize:vertical" style-focus="border-color:var(--text-faint)"></textarea>
-                  <button style="align-self:flex-end;height:30px;padding:0 12px;background:var(--text);border:0;border-radius:4px;color:var(--bg);font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:var(--text-2)">Comment</button>
-                </div>
+                <button style="height:32px;background:transparent;border:1px dashed var(--border3);border-radius:4px;color:var(--text-dim);font-size:12.5px;cursor:pointer" style-hover="border-color:var(--text-faint);color:var(--text)">Share with group</button>
               </div>
+            </sc-if>
             </sc-if>
           </div>
         </div>
@@ -352,10 +334,10 @@ select{appearance:none}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"></circle><path d="M8 7.2v4"></path><circle cx="8" cy="5" r=".7" fill="currentColor" stroke="none"></circle></svg>
             </sc-if>
             <sc-if value="{{ r.isClip }}" hint-placeholder-val="{{ false }}">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="2" width="9" height="12" rx="1"></rect><path d="M5.8 5.4h4.4M5.8 8h4.4M5.8 10.6h2.6"></path></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10.5 2.6 4.2 8.9a2.6 2.6 0 0 0 3.7 3.7l6-6a1.7 1.7 0 0 0-2.4-2.4l-5.7 5.7a.8.8 0 0 0 1.1 1.1l5-5"></path></svg>
             </sc-if>
-            <sc-if value="{{ r.isChat }}" hint-placeholder-val="{{ false }}">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 3.5h11v7.5h-6.2L4 13.5V11H2.5z"></path></svg>
+            <sc-if value="{{ r.isCoverage }}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5.5" cy="6" r="2"></circle><circle cx="11" cy="6.5" r="1.7"></circle><path d="M1.8 13c.4-2.4 2-3.8 3.7-3.8s3.3 1.4 3.7 3.8"></path><path d="M9.8 9.6c1.5.1 2.7 1.3 3 3.4"></path></svg>
             </sc-if>
             <sc-if value="{{ r.badge }}" hint-placeholder-val="{{ false }}">
               <span style="position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;display:inline-flex;align-items:center;justify-content:center;background:var(--text);color:var(--bg);border-radius:3px;font-family:'Geist Mono',ui-monospace,monospace;font-size:9.5px;font-weight:600">{{ r.badge }}</span>
@@ -367,7 +349,7 @@ select{appearance:none}
   </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;new&quot;,&quot;in_review&quot;,&quot;pending_info&quot;,&quot;approved&quot;,&quot;closed&quot;],&quot;default&quot;:&quot;approved&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV-S-123&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseDescription&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV SSI Updates&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;createdBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Shambhu Sharan Tiwary&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;updatedBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Abhinav Anand&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;unreadComments&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:99,&quot;min&quot;:0,&quot;max&quot;:99,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Panels&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;new&quot;,&quot;in_review&quot;,&quot;pending_info&quot;,&quot;approved&quot;,&quot;closed&quot;],&quot;default&quot;:&quot;approved&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV-S-123&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseDescription&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV SSI Updates&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;createdBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;a.lindqvist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;updatedBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;d.reyes&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;coverageCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:3,&quot;min&quot;:0,&quot;max&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Panels&quot;}}">
 const STATUSES = {
   new:        { label: "New",           color: "#fbbf24", sla: "4h 12m left",  hint: "Intake fields are editable until the case is assigned for review." },
   in_review:  { label: "In review",     color: "#60a5fa", sla: "1d 3h left",   hint: "Complete the review form, then approve or request more information." },
@@ -519,9 +501,9 @@ class Component extends DCLogic {
     }));
 
     const rail = [
-      { title: "Details", isInfo: true, isClip: false, isChat: false, key: "details", badge: false },
-      { title: "Attachments", isInfo: false, isClip: true, isChat: false, key: "attachments", badge: "3" },
-      { title: "Comments", isInfo: false, isClip: false, isChat: true, key: "comments", badge: String(this.props.unreadComments ?? 2) }
+      { title: "Details", isInfo: true, isClip: false, isCoverage: false, key: "details", badge: false },
+      { title: "Attachments", isInfo: false, isClip: true, isCoverage: false, key: "attachments", badge: "3" },
+      { title: "Coverage", isInfo: false, isClip: false, isCoverage: true, key: "coverage", badge: String(this.props.coverageCount ?? 3) }
     ].map(r => {
       const on = this.state.panel === r.key;
       return { ...r,
@@ -584,9 +566,9 @@ class Component extends DCLogic {
       panelOpen: !!this.state.panel,
       isDetails: this.state.panel === "details",
       isAttachments: this.state.panel === "attachments",
-      isComments: this.state.panel === "comments",
-      panelTitle: this.state.panel === "comments" ? "Comments" : (this.state.panel === "details" ? "Details" : "Attachments"),
-      panelCount: this.state.panel === "comments" ? "4" : (this.state.panel === "details" ? "" : "3"),
+      isCoverage: this.state.panel === "coverage",
+      panelTitle: this.state.panel === "coverage" ? "Coverage" : (this.state.panel === "details" ? "Details" : "Attachments"),
+      panelCount: this.state.panel === "coverage" ? "3" : (this.state.panel === "details" ? "" : "3"),
       createdBy: this.props.createdBy ?? "a.lindqvist",
       createdAt: "2 days ago",
       updatedBy: this.props.updatedBy ?? "d.reyes",
@@ -620,11 +602,10 @@ class Component extends DCLogic {
         { ext: "PNG", name: "charge-screenshot.png", meta: "88 KB · a.lindqvist · 21 Aug" },
         { ext: "CSV", name: "processor-log-0712.csv", meta: "6 KB · system · 22 Aug" }
       ],
-      comments: [
-        { author: "m.okafor", ts: "22 Aug 16:42", body: "Processor log confirms two captures for the same auth. Requesting the statement to rule out a third-party charge." },
-        { author: "a.lindqvist", ts: "22 Aug 18:07", body: "Statement attached. The second charge posted the next morning." },
-        { author: "d.reyes", ts: "23 Aug 08:01", body: "Clear duplicate — approving full reversal under BIL-14.2." },
-        { author: "system", ts: "23 Aug 11:20", body: "Refund of $248.00 submitted to original payment method." }
+      coverage: [
+        { initials: "TB", name: "Tier 2 — Billing Ops", role: "Editor · full access" },
+        { initials: "FR", name: "Fraud Review", role: "Viewer · read-only" },
+        { initials: "CS", name: "Customer Care EMEA", role: "Viewer · read-only" }
       ]
     };
   }
