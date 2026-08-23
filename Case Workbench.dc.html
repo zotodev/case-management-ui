@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#09090b;--card:#0f0f11;--inset:#0c0c0e;--field:#141417;--pop:#111114;
+--line-soft:#17171a;--line:#18181b;--line2:#1c1c20;--border:#232327;--border2:#27272a;--border3:#2a2a2f;--border-strong:#3f3f46;
+--text:#fafafa;--text-hi:#ffffff;--text-2:#e4e4e7;--text-soft:#d4d4d8;--text-dim:#a1a1aa;--text-muted:#71717a;--text-faint:#52525b;
+--hover:#1a1a1e;--row-hover:#131316;--shadow:rgba(0,0,0,.6);
+--danger-fg:#f87171;--danger-border:#4c1d1d;--danger-hover-bg:#1f1113;--danger-hover-border:#7f1d1d;--danger-hover-fg:#fca5a5;
+}
+:root[data-theme="light"]{
+--bg:#fbfbfa;--card:#ffffff;--inset:#f6f6f4;--field:#ffffff;--pop:#ffffff;
+--line-soft:#f0f0ee;--line:#e7e7e4;--line2:#eeeeec;--border:#e2e2de;--border2:#dcdcd7;--border3:#d5d5d0;--border-strong:#9a9a94;
+--text:#18181b;--text-hi:#000000;--text-2:#3f3f46;--text-soft:#52525b;--text-dim:#6b6b73;--text-muted:#8a8a91;--text-faint:#a3a39c;
+--hover:#f3f3f1;--row-hover:#f7f7f5;--shadow:rgba(0,0,0,.14);
+--danger-fg:#b91c1c;--danger-border:#e8c9c9;--danger-hover-bg:#fdf3f3;--danger-hover-border:#d99a9a;--danger-hover-fg:#991b1b;
+}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:Geist,Helvetica,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--text-2);text-decoration:none}
+a:hover{color:var(--text-hi)}
+input,select,textarea,button{font-family:inherit}
+select{appearance:none}
+::selection{background:var(--border-strong)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--border2);border:3px solid var(--bg);border-radius:6px}
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--bg)">
+
+  <div ref="{{ headerRef }}" style="position:sticky;top:0;z-index:40;background:var(--bg);padding:14px 20px 0;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)">
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column">
+      <div style="padding:10px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)">
+      <button onClick="{{ onBack }}" style="display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 11px 0 9px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"><path d="M9.5 3.5 5 8l4.5 4.5"></path></svg>
+        Back
+      </button>
+      <div style="width:1px;height:20px;background:var(--border)"></div>
+      
+      
+      <div style="display:flex;align-items:center;gap:22px">
+        <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ createdBy }}</div>
+          <div style="font-size:11px;color:var(--text-faint)">created {{ createdAt }}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+          <div style="font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap">{{ updatedBy }}</div>
+          <div style="font-size:11px;color:var(--text-faint)">updated {{ updatedAt }}</div>
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        
+        <sc-for list="{{ actions }}" as="a" hint-placeholder-count="2">
+          <sc-if value="{{ a.isGhost }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 13px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-2);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">{{ a.label }}</button>
+          </sc-if>
+          <sc-if value="{{ a.isDanger }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 13px;background:transparent;border:1px solid var(--danger-border);border-radius:4px;color:var(--danger-fg);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap" style-hover="background:var(--danger-hover-bg);border-color:var(--danger-hover-border);color:var(--danger-hover-fg)">{{ a.label }}</button>
+          </sc-if>
+          <sc-if value="{{ a.isPrimary }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ a.onClick }}" style="height:32px;padding:0 14px;background:var(--text);border:1px solid var(--text);border-radius:4px;color:var(--bg);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:var(--text-2);border-color:var(--text-2)">{{ a.label }}</button><div style="position:relative">
+              <button onClick="{{ toggleMore }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-dim);cursor:pointer" style-hover="background:var(--hover);color:var(--text);border-color:var(--border-strong)" title="More">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><circle cx="3" cy="8" r="1.2"></circle><circle cx="8" cy="8" r="1.2"></circle><circle cx="13" cy="8" r="1.2"></circle></svg>
+              </button>
+              <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:38px;right:0;z-index:60;width:200px;background:var(--pop);border:1px solid var(--border3);border-radius:6px;padding:4px;box-shadow:0 12px 32px var(--shadow)">
+                  <button onClick="{{ toggleTheme }}" style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="3.4"></circle><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M12.9 3.1l-1.1 1.1M4.2 11.8l-1.1 1.1"></path></svg>
+                    {{ themeLabel }}
+                  </button>
+                  <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="2.5" width="7" height="7" rx="1"></rect><path d="M6.5 6.5h7v7h-7z"></path></svg>
+                    Copy case link
+                  </button>
+                  <button style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4.5 6V2.5h7V6M4.5 11.5h7V14h-7z"></path><rect x="2.5" y="6" width="11" height="5.5" rx="1"></rect></svg>
+                    Print summary
+                  </button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </sc-for>
+      </div>
+      </div>
+
+      <div style="padding: 15px 16px 16px; display: flex; align-items: flex-start; gap: 20px; padding-top: 10px; padding-right: 10px; padding-left: 10px; padding-bottom: 10px">
+      <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:19px;font-weight:500;letter-spacing:-.01em;color:var(--text)">{{ caseId }}</span>
+          <span style="font-size:13px;color:var(--text-faint)">—</span>
+          <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#fbbf24">
+              <span style="width:5px;height:5px;border-radius:50%;background:#fbbf24"></span>Unsaved
+            </span>
+          </sc-if>
+          <sc-if value="{{ saved }}" hint-placeholder-val="{{ true }}">
+            <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text-muted)">
+              <span style="width:5px;height:5px;border-radius:50%;background:var(--text-muted)"></span>Saved
+            </span>
+          </sc-if>
+        </div>
+        <div style="font-size:12.5px;line-height:1.5;color:var(--text-dim);max-width:70ch;text-wrap:pretty">{{ caseDescription }}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:7px;position:relative">
+        <button onClick="{{ toggleMenu }}" style="display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 9px;background:var(--field);border:1px solid var(--border3);border-radius:4px;cursor:pointer" style-hover="border-color:var(--border-strong)">
+          <span style="width:6px;height:6px;border-radius:50%;background: {{ statusColor }}"></span>
+          <span style="font-size:12px;font-weight:500;color:var(--text-2);letter-spacing:.01em">{{ statusLabel }}</span>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.6"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+        </button>
+        
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:34px;right:0;z-index:60;width:210px;background:var(--pop);border:1px solid var(--border3);border-radius:6px;padding:4px;box-shadow:0 12px 32px var(--shadow)">
+            <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);padding:6px 8px 5px">Set status</div>
+            <sc-for list="{{ statusOptions }}" as="s" hint-placeholder-count="5">
+              <button onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 8px;background:transparent;border:0;border-radius:4px;color:var(--text-soft);font-size:12.5px;text-align:left;cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+                <span style="width:6px;height:6px;border-radius:50%;background: {{ s.color }}"></span>
+                {{ s.label }}
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:2px;padding:0 2px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button onClick="{{ t.onClick }}" style="position:relative;height:38px;padding:0 14px;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--text-muted);font-size:13px;font-weight:500;cursor:pointer" style-hover="color:var(--text-soft)">
+          <sc-if value="{{ t.active }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--text)"></span>
+          </sc-if>
+          <span style="color: {{ t.color }}">{{ t.label }}</span>
+          <sc-if value="{{ t.count }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:7px;font-family:'Geist Mono',ui-monospace,monospace;font-size:10.5px;color:var(--text-faint)">{{ t.count }}</span>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:flex-start;gap:0;padding:20px">
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding-bottom:140px;min-height: {{ rowMinH }}">
+
+      <sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-left:2px solid var(--border-strong);border-radius:6px;padding:11px 14px">
+            <span style="font-size:12.5px;color:var(--text-dim);line-height:1.5">{{ statusHint }}</span>
+          </div>
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:6px">
+              <div style="padding:13px 16px;border-bottom:1px solid var(--line2);display:flex;align-items:baseline;gap:10px">
+                <span style="font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em">{{ g.title }}</span>
+                <span style="font-size:11.5px;color:var(--text-faint)">{{ g.note }}</span>
+              </div>
+              <div style="padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px">
+                <sc-for list="{{ g.fields }}" as="f" hint-placeholder-count="4">
+                  <label style="display:flex;flex-direction:column;gap:6px;grid-column: {{ f.span }}">
+                    <span style="font-size:11.5px;font-weight:500;color:var(--text-dim);letter-spacing:.01em">{{ f.label }}</span>
+                    <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                      <input value="{{ f.value }}" placeholder="{{ f.placeholder }}" onChange="{{ f.onChange }}" style="height:34px;padding:0 10px;background:var(--field);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:13px;outline:none;width:100%" style-focus="border-color:var(--text-faint);background:var(--line-soft)">
+                    </sc-if>
+                    <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:relative">
+                        <select value="{{ f.value }}" onChange="{{ f.onChange }}" style="height:34px;width:100%;padding:0 30px 0 10px;background:var(--field);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:13px;outline:none;cursor:pointer" style-focus="border-color:var(--text-faint)">
+                          <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                            <option value="{{ o }}" style="background:var(--field)">{{ o }}</option>
+                          </sc-for>
+                        </select>
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--text-muted)" stroke-width="1.6" style="position:absolute;right:10px;top:11px;pointer-events:none"><path d="M4 6.5 8 10.5 12 6.5"></path></svg>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}">
+                      <textarea value="{{ f.value }}" placeholder="{{ f.placeholder }}" onChange="{{ f.onChange }}" rows="4" style="padding:9px 10px;background:var(--field);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:13px;line-height:1.6;outline:none;resize:vertical;width:100%" style-focus="border-color:var(--text-faint);background:var(--line-soft)"></textarea>
+                    </sc-if>
+                    <sc-if value="{{ f.isRead }}" hint-placeholder-val="{{ false }}">
+                      <div style="min-height:34px;display:flex;align-items:flex-start;padding:8px 10px;background:var(--inset);border:1px dashed var(--border2);border-radius:4px;color:var(--text-dim);font-size:13px;line-height:1.6;white-space:pre-wrap;font-family:'Geist Mono',ui-monospace,monospace">{{ f.value }}</div>
+                    </sc-if>
+                    <sc-if value="{{ f.hint }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-size:11px;color:var(--text-faint)">{{ f.hint }}</span>
+                    </sc-if>
+                  </label>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:6px">
+            <div style="padding:13px 16px;border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:10px">
+              <span style="font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em">Instruction lines</span>
+              <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--text-faint)">10</span>
+              <div style="flex:1"></div>
+              <button style="height:28px;padding:0 10px;background:transparent;border:1px solid var(--border3);border-radius:4px;color:var(--text-soft);font-size:12px;font-weight:500;cursor:pointer" style-hover="background:var(--hover);border-color:var(--border-strong);color:var(--text-hi)">Export CSV</button>
+              <button style="height:28px;padding:0 10px;background:transparent;border:1px dashed var(--border3);border-radius:4px;color:var(--text-dim);font-size:12px;cursor:pointer" style-hover="border-color:var(--text-faint);color:var(--text)">Add line</button>
+            </div>
+            <div style="overflow-x:auto">
+              <div style="min-width:700px">
+                <div style="display:grid;grid-template-columns:30px minmax(150px,1.4fr) 48px 104px minmax(110px,1fr) 88px 92px;gap:8px;padding:9px 16px;border-bottom:1px solid var(--line2);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">
+                  <span>#</span><span>Account</span><span>Ccy</span><span>Amount</span><span>Correspondent</span><span>Value date</span><span>State</span>
+                </div>
+                <sc-for list="{{ lines }}" as="l" hint-placeholder-count="10">
+                  <div style="display:grid;grid-template-columns:30px minmax(150px,1.4fr) 48px 104px minmax(110px,1fr) 88px 92px;gap:8px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line-soft);font-size:12.5px" style-hover="background:var(--row-hover)">
+                    <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--text-faint)">{{ l.n }}</span>
+                    <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--text-2);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.account }}</span>
+                    <span style="color:var(--text-dim)">{{ l.ccy }}</span>
+                    <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--text);text-align:right;white-space:nowrap">{{ l.amount }}</span>
+                    <span style="color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ l.corr }}</span>
+                    <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--text-muted);font-size:11.5px;white-space:nowrap">{{ l.date }}</span>
+                    <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-dim);white-space:nowrap">
+                      <span style="width:5px;height:5px;border-radius:50%;background: {{ l.color }};flex:none"></span>{{ l.state }}
+                    </span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:6px">
+          <div style="padding:13px 16px;border-bottom:1px solid var(--line2);font-size:13px;font-weight:600;color:var(--text)">Audit trail</div>
+          <div style="display:grid;grid-template-columns:170px 150px 1fr 1fr;font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.07em;padding:9px 16px;border-bottom:1px solid var(--line2)">
+            <span>Timestamp</span><span>Actor</span><span>Field</span><span>Change</span>
+          </div>
+          <sc-for list="{{ audit }}" as="r" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:170px 150px 1fr 1fr;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line-soft);font-size:12.5px">
+              <span style="font-family:'Geist Mono',ui-monospace,monospace;color:var(--text-muted)">{{ r.ts }}</span>
+              <span style="color:var(--text-soft)">{{ r.actor }}</span>
+              <span style="color:var(--text-dim)">{{ r.field }}</span>
+              <span style="color:var(--text-dim);font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px">{{ r.change }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px 20px">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px">Status history</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <sc-for list="{{ history }}" as="h" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:18px 1fr;gap:14px">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+                  <span style="width:8px;height:8px;border-radius:50%;background: {{ h.color }};margin-top:5px"></span>
+                  <span style="flex:1;width:1px;background:var(--border2)"></span>
+                </div>
+                <div style="padding-bottom:20px;display:flex;flex-direction:column;gap:3px">
+                  <div style="display:flex;align-items:baseline;gap:10px">
+                    <span style="font-size:13px;font-weight:500;color:var(--text)">{{ h.label }}</span>
+                    <span style="font-size:11px;color:var(--text-faint);font-family:'Geist Mono',ui-monospace,monospace">{{ h.ts }}</span>
+                  </div>
+                  <span style="font-size:12.5px;color:var(--text-dim)">{{ h.note }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="position:sticky;align-self:flex-start;display:flex;align-items:flex-start;gap:12px;margin-left:12px;top: {{ railTop }}">
+      <sc-if value="{{ panelOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="width:320px;background:var(--card);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;max-height: {{ panelMaxH }}">
+          <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line2)">
+            <span style="font-size:13px;font-weight:600;color:var(--text)">{{ panelTitle }}</span>
+            <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;color:var(--text-faint)">{{ panelCount }}</span>
+            <div style="flex:1"></div>
+            <button onClick="{{ closePanel }}" style="width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--text-dim);cursor:pointer" style-hover="background:var(--line2);color:var(--text-hi)">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"></path></svg>
+            </button>
+          </div>
+          <div style="padding:12px 14px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+            <sc-if value="{{ isDetails }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint)">Activity</div>
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <div style="font-size:12.5px;font-weight:500;color:var(--text-2)">{{ createdBy }}</div>
+                    <div style="font-size:11px;color:var(--text-faint)">created {{ createdAt }}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:1px">
+                    <div style="font-size:12.5px;font-weight:500;color:var(--text-2)">{{ updatedBy }}</div>
+                    <div style="font-size:11px;color:var(--text-faint)">updated {{ updatedAt }}</div>
+                  </div>
+                </div>
+                <div style="height:1px;background:var(--line2)"></div>
+                <div style="display:flex;flex-direction:column;gap:11px">
+                  <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint)">Additional details</div>
+                  <sc-for list="{{ details }}" as="d" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline">
+                      <span style="font-size:11.5px;color:var(--text-muted);line-height:1.5">{{ d.label }}</span>
+                      <span style="font-size:12.5px;color:var(--text-2);line-height:1.5;text-wrap:pretty">{{ d.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isAttachments }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ attachments }}" as="f" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--field);border:1px solid var(--border);border-radius:4px">
+                    <span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:9.5px;color:var(--text-dim);border:1px solid var(--border3);border-radius:3px;padding:3px 4px">{{ f.ext }}</span>
+                    <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:12.5px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.name }}</span>
+                      <span style="font-size:11px;color:var(--text-faint)">{{ f.meta }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+                <button style="height:32px;background:transparent;border:1px dashed var(--border3);border-radius:4px;color:var(--text-dim);font-size:12.5px;cursor:pointer" style-hover="border-color:var(--text-faint);color:var(--text)">Upload file</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ isComments }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <sc-for list="{{ comments }}" as="c" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:5px">
+                    <div style="display:flex;align-items:baseline;gap:8px">
+                      <span style="font-size:12px;font-weight:600;color:var(--text)">{{ c.author }}</span>
+                      <span style="font-size:10.5px;color:var(--text-faint);font-family:'Geist Mono',ui-monospace,monospace">{{ c.ts }}</span>
+                    </div>
+                    <div style="font-size:12.5px;line-height:1.6;color:var(--text-dim);background:var(--field);border:1px solid var(--border);border-radius:4px;padding:9px 10px;text-wrap:pretty">{{ c.body }}</div>
+                  </div>
+                </sc-for>
+                <div style="display:flex;flex-direction:column;gap:8px;padding-top:4px;border-top:1px solid var(--line2)">
+                  <textarea placeholder="Add a comment" rows="3" style="padding:9px 10px;background:var(--field);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:12.5px;line-height:1.6;outline:none;resize:vertical" style-focus="border-color:var(--text-faint)"></textarea>
+                  <button style="align-self:flex-end;height:30px;padding:0 12px;background:var(--text);border:0;border-radius:4px;color:var(--bg);font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:var(--text-2)">Comment</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px">
+        <sc-for list="{{ rail }}" as="r" hint-placeholder-count="2">
+          <button onClick="{{ r.onClick }}" title="{{ r.title }}" style="position:relative;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;background: {{ r.bg }};border:1px solid {{ r.border }};border-radius:4px;color: {{ r.fg }};cursor:pointer" style-hover="background:var(--line2);color:var(--text)">
+            <sc-if value="{{ r.isInfo }}" hint-placeholder-val="{{ true }}">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"></circle><path d="M8 7.2v4"></path><circle cx="8" cy="5" r=".7" fill="currentColor" stroke="none"></circle></svg>
+            </sc-if>
+            <sc-if value="{{ r.isClip }}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="2" width="9" height="12" rx="1"></rect><path d="M5.8 5.4h4.4M5.8 8h4.4M5.8 10.6h2.6"></path></svg>
+            </sc-if>
+            <sc-if value="{{ r.isChat }}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2.5 3.5h11v7.5h-6.2L4 13.5V11H2.5z"></path></svg>
+            </sc-if>
+            <sc-if value="{{ r.badge }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;display:inline-flex;align-items:center;justify-content:center;background:var(--text);color:var(--bg);border-radius:3px;font-family:'Geist Mono',ui-monospace,monospace;font-size:9.5px;font-weight:600">{{ r.badge }}</span>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;status&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;new&quot;,&quot;in_review&quot;,&quot;pending_info&quot;,&quot;approved&quot;,&quot;closed&quot;],&quot;default&quot;:&quot;approved&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseId&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV-S-123&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;caseDescription&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;CBV SSI Updates&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;createdBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Shambhu Sharan Tiwary&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;updatedBy&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Abhinav Anand&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Case&quot;},&quot;unreadComments&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:99,&quot;min&quot;:0,&quot;max&quot;:99,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Panels&quot;}}">
+const STATUSES = {
+  new:        { label: "New",           color: "#fbbf24", sla: "4h 12m left",  hint: "Intake fields are editable until the case is assigned for review." },
+  in_review:  { label: "In review",     color: "#60a5fa", sla: "1d 3h left",   hint: "Complete the review form, then approve or request more information." },
+  pending_info:{label: "Pending info",   color: "#c084fc", sla: "paused",       hint: "Waiting on the requester. Fields are locked until a response arrives." },
+  approved:   { label: "Approved",       color: "#4ade80", sla: "met",          hint: "Approval recorded. Set the effective date and any conditions, then close." },
+  closed:     { label: "Closed",         color: "var(--text-muted)", sla: "met",          hint: "This case is closed and read-only. Reopen to make further changes." }
+};
+
+const ACTIONS = {
+  new:         [{ label: "Reject", kind: "danger" }, { label: "Assign to me", kind: "primary" }],
+  in_review:   [{ label: "Request info", kind: "ghost" }, { label: "Reject", kind: "danger" }, { label: "Approve", kind: "primary" }],
+  pending_info:[{ label: "Cancel request", kind: "ghost" }, { label: "Resume review", kind: "primary" }],
+  approved:    [{ label: "Add note", kind: "ghost" }, { label: "Close case", kind: "primary" }],
+  closed:      [{ label: "Export", kind: "ghost" }, { label: "Reopen case", kind: "primary" }]
+};
+
+class Component extends DCLogic {
+  state = {
+    status: null,
+    tab: "Main",
+    panel: "attachments",
+    headerH: 0,
+    theme: "dark",
+    moreOpen: false,
+    menuOpen: false,
+    values: {}
+  };
+
+  headerRef = React.createRef();
+
+  componentDidMount() {
+    document.documentElement.setAttribute("data-theme", this.state.theme);
+    const el = this.headerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      if (h && h !== this.state.headerH) this.setState({ headerH: h });
+    };
+    measure();
+    this._ro = new ResizeObserver(measure);
+    this._ro.observe(el);
+    window.addEventListener("resize", measure);
+    this._measure = measure;
+  }
+
+  componentWillUnmount() {
+    if (this._ro) this._ro.disconnect();
+    if (this._measure) window.removeEventListener("resize", this._measure);
+  }
+
+  get status() { return this.state.status || this.props.status || "in_review"; }
+
+  set(key, v) { this.setState(s => ({ values: { ...s.values, [key]: v } })); }
+  val(key, d) { return this.state.values[key] !== undefined ? this.state.values[key] : d; }
+
+  field(key, label, type, opts) {
+    opts = opts || {};
+    const f = {
+      label, span: opts.full ? "1 / -1" : "auto", hint: opts.hint || false,
+      placeholder: opts.placeholder || "",
+      options: opts.options || [],
+      isText: type === "text", isSelect: type === "select", isArea: type === "area", isRead: type === "read",
+      value: this.val(key, opts.value || ""),
+      onChange: e => this.set(key, e.target.value)
+    };
+    return f;
+  }
+
+  groupsFor(s) {
+    const F = (k, l, t, o) => this.field(k, l, t, o);
+    if (s === "new") return [
+      { title: "Intake", note: "captured on submission", fields: [
+        F("type", "Case type", "select", { options: ["Billing dispute", "Service request", "Complaint", "Fraud review"], value: "Billing dispute" }),
+        F("priority", "Priority", "select", { options: ["Low", "Normal", "High", "Urgent"], value: "High" }),
+        F("received", "Received", "read", { value: "2026-08-21 09:14 UTC" }),
+        F("channel", "Channel", "read", { value: "Web form" })
+      ]},
+      { title: "Summary", note: "", fields: [
+        F("summary", "Description", "area", { full: true, value: "Customer reports duplicate charge of $248.00 on the July statement. Requests reversal and confirmation of the corrected balance." }),
+        F("assignee", "Suggested queue", "select", { options: ["Tier 1 — Billing", "Tier 2 — Escalations", "Fraud ops"], value: "Tier 1 — Billing" })
+      ]}
+    ];
+    if (s === "in_review") return [
+      { title: "Review", note: "required before approval", fields: [
+        F("reviewer", "Reviewer", "read", { value: "m.okafor@acme.co" }),
+        F("risk", "Risk rating", "select", { options: ["Low", "Medium", "High"], value: "Medium" }),
+        F("findings", "Findings", "area", { full: true, placeholder: "Summarise what was verified and the evidence used", value: "Duplicate transaction confirmed against processor log. Both charges cleared on 12 Jul; no prior reversal on file." }),
+        F("recommendation", "Recommendation", "select", { options: ["Full reversal", "Partial reversal", "Decline", "Escalate"], value: "Full reversal" }),
+        F("amount", "Reversal amount", "text", { value: "248.00", hint: "USD, excluding fees" })
+      ]},
+      { title: "Verification", note: "", fields: [
+        F("idcheck", "Identity check", "select", { options: ["Passed", "Failed", "Not required"], value: "Passed" }),
+        F("policy", "Policy reference", "text", { placeholder: "e.g. BIL-14.2", value: "BIL-14.2" })
+      ]}
+    ];
+    if (s === "pending_info") return [
+      { title: "Information request", note: "locked while pending", fields: [
+        F("reqfrom", "Requested from", "read", { value: "customer · a.lindqvist" }),
+        F("reqon", "Requested on", "read", { value: "2026-08-22 16:40 UTC" }),
+        F("items", "Items requested", "area", { full: true, value: "1. Bank statement showing both charges\n2. Written confirmation the goods were not received" }),
+        F("followup", "Follow-up date", "text", { value: "2026-08-29" }),
+        F("reminder", "Reminder cadence", "select", { options: ["None", "Every 3 days", "Weekly"], value: "Every 3 days" })
+      ]}
+    ];
+    if (s === "approved") return [
+      { title: "Approval", note: "recorded", fields: [
+        F("apprby", "Approved by", "read", { value: "d.reyes@acme.co" }),
+        F("appron", "Approved on", "read", { value: "2026-08-23 08:02 UTC" }),
+        F("effective", "Effective date", "text", { value: "2026-08-25" }),
+        F("method", "Settlement method", "select", { options: ["SWIFT MT202", "Book transfer", "Local clearing"], value: "SWIFT MT202" }),
+        F("approute", "Approval route", "read", { value: "Tier 2 → Ops sign-off" }),
+        F("ref", "Approval reference", "text", { value: "APR-2026-11842" }),
+        F("conditions", "Conditions", "area", { full: true, placeholder: "Any conditions attached to this approval" })
+      ]},
+      { title: "Counterparty", note: "static data", fields: [
+        F("cparty", "Counterparty", "text", { value: "Nordic Retail Group AB" }),
+        F("bic", "BIC", "text", { value: "NDEASESSXXX" }),
+        F("account", "Account", "text", { value: "SE45 5000 0000 0583 9825 7466" }),
+        F("ccy", "Settlement currency", "select", { options: ["SEK", "EUR", "USD", "GBP"], value: "SEK" }),
+        F("country", "Country of settlement", "select", { options: ["Sweden", "Denmark", "Norway", "Finland"], value: "Sweden" }),
+        F("intermediary", "Intermediary", "text", { placeholder: "Optional", value: "" })
+      ]},
+      { title: "Controls", note: "auto-evaluated", fields: [
+        F("sanctions", "Sanctions screening", "read", { value: "Cleared · 23 Aug 07:55" }),
+        F("dual", "Dual authorisation", "read", { value: "Satisfied (2 of 2)" }),
+        F("limit", "Limit check", "read", { value: "Within tier limit" }),
+        F("exception", "Exceptions raised", "read", { value: "None" })
+      ]}
+    ];
+    return [
+      { title: "Outcome", note: "read-only", fields: [
+        F("outcome", "Outcome", "read", { value: "Reversal completed" }),
+        F("closedby", "Closed by", "read", { value: "d.reyes@acme.co" }),
+        F("closedon", "Closed on", "read", { value: "2026-08-23 11:20 UTC" }),
+        F("cycle", "Cycle time", "read", { value: "2d 02h" }),
+        F("notes", "Resolution notes", "read", { full: true, value: "Full reversal of $248.00 issued to original card. Customer notified by email." })
+      ]}
+    ];
+  }
+
+  renderVals() {
+    const s = this.status;
+    const cfg = STATUSES[s];
+    const tabs = ["Main", "Audit", "History"].map((label, i) => ({
+      label, active: this.state.tab === label,
+      color: this.state.tab === label ? "var(--text)" : "inherit",
+      count: label === "Audit" ? "24" : (label === "History" ? "5" : false),
+      onClick: () => this.setState({ tab: label })
+    }));
+
+    const rail = [
+      { title: "Details", isInfo: true, isClip: false, isChat: false, key: "details", badge: false },
+      { title: "Attachments", isInfo: false, isClip: true, isChat: false, key: "attachments", badge: "3" },
+      { title: "Comments", isInfo: false, isClip: false, isChat: true, key: "comments", badge: String(this.props.unreadComments ?? 2) }
+    ].map(r => {
+      const on = this.state.panel === r.key;
+      return { ...r,
+        bg: on ? "var(--line2)" : "transparent",
+        border: on ? "var(--border-strong)" : "var(--border)",
+        fg: on ? "var(--text)" : "var(--text-dim)",
+        onClick: () => this.setState({ panel: on ? null : r.key })
+      };
+    });
+
+    const hh = this.state.headerH || 200;
+    return {
+      headerRef: this.headerRef,
+      dirty: Object.keys(this.state.values).length > 0,
+      saved: Object.keys(this.state.values).length === 0,
+      moreOpen: this.state.moreOpen,
+      toggleMore: () => this.setState(st => ({ moreOpen: !st.moreOpen, menuOpen: false })),
+      themeLabel: this.state.theme === "dark" ? "Light mode" : "Dark mode",
+      toggleTheme: () => this.setState(st => {
+        const theme = st.theme === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+        return { theme, moreOpen: false };
+      }),
+      railTop: (hh + 20) + "px",
+      panelMaxH: "calc(100vh - " + (hh + 40) + "px)",
+      rowMinH: "calc(100vh - " + hh + "px)",
+      caseId: this.props.caseId ?? "CASE-2026-04871",
+      caseType: "BILLING DISPUTE",
+      caseDescription: this.props.caseDescription ?? "Duplicate card charge of $248.00 on the July statement — customer requests full reversal and a corrected balance confirmation.",
+      statusLabel: cfg.label, statusColor: cfg.color, sla: cfg.sla, statusHint: cfg.hint,
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(st => ({ menuOpen: !st.menuOpen })),
+      statusOptions: Object.keys(STATUSES).map(k => ({
+        label: STATUSES[k].label, color: STATUSES[k].color,
+        onClick: () => this.setState({ status: k, menuOpen: false })
+      })),
+      onBack: () => {},
+      actions: ACTIONS[s].map(a => ({
+        label: a.label, isPrimary: a.kind === "primary", isDanger: a.kind === "danger", isGhost: a.kind === "ghost",
+        onClick: () => {}
+      })),
+      tabs,
+      isMain: this.state.tab === "Main",
+      isAudit: this.state.tab === "Audit",
+      isHistory: this.state.tab === "History",
+      groups: this.groupsFor(s),
+      audit: [
+        { ts: "2026-08-23 11:20", actor: "d.reyes", field: "Status", change: "approved → closed" },
+        { ts: "2026-08-23 08:02", actor: "d.reyes", field: "Status", change: "in_review → approved" },
+        { ts: "2026-08-23 07:58", actor: "m.okafor", field: "Risk rating", change: "high → medium" },
+        { ts: "2026-08-22 16:40", actor: "m.okafor", field: "Info request", change: "created" },
+        { ts: "2026-08-22 10:11", actor: "system", field: "SLA", change: "clock paused" },
+        { ts: "2026-08-21 09:14", actor: "web-intake", field: "Case", change: "created" }
+      ],
+      history: Object.keys(STATUSES).slice().reverse().map((k, i) => ({
+        label: STATUSES[k].label, color: STATUSES[k].color,
+        ts: ["2026-08-23 11:20", "2026-08-23 08:02", "2026-08-22 16:40", "2026-08-21 14:03", "2026-08-21 09:14"][i],
+        note: ["Reversal completed and customer notified", "Approved by d.reyes under BIL-14.2", "Statement evidence requested from customer", "Picked up by m.okafor from Tier 1 queue", "Submitted via web form"][i]
+      })),
+      panelOpen: !!this.state.panel,
+      isDetails: this.state.panel === "details",
+      isAttachments: this.state.panel === "attachments",
+      isComments: this.state.panel === "comments",
+      panelTitle: this.state.panel === "comments" ? "Comments" : (this.state.panel === "details" ? "Details" : "Attachments"),
+      panelCount: this.state.panel === "comments" ? "4" : (this.state.panel === "details" ? "" : "3"),
+      createdBy: this.props.createdBy ?? "a.lindqvist",
+      createdAt: "2 days ago",
+      updatedBy: this.props.updatedBy ?? "d.reyes",
+      updatedAt: "3 hours ago",
+      lines: [
+        ["SE45 5000 0000 0583 9825", "SEK", "248,000.00", "Nordea Bank Abp", "2026-08-25", "Confirmed", "#4ade80"],
+        ["DE89 3704 0044 0532 0130", "EUR", "96,400.00", "Commerzbank AG", "2026-08-25", "Confirmed", "#4ade80"],
+        ["GB29 NWBK 6016 1331 9268", "GBP", "41,750.00", "NatWest Markets", "2026-08-26", "Pending", "#fbbf24"],
+        ["US64 SVBK 0000 0011 2233", "USD", "310,000.00", "Citibank N.A.", "2026-08-26", "Confirmed", "#4ade80"],
+        ["NO93 8601 1117 947", "NOK", "88,120.00", "DNB Bank ASA", "2026-08-27", "Pending", "#fbbf24"],
+        ["DK50 0040 0440 1162 43", "DKK", "12,905.50", "Danske Bank", "2026-08-27", "Review", "#60a5fa"],
+        ["FI21 1234 5600 0007 85", "EUR", "64,300.00", "OP Corporate Bank", "2026-08-28", "Confirmed", "#4ade80"],
+        ["CH93 0076 2011 6238 5295", "CHF", "27,480.00", "UBS Switzerland AG", "2026-08-28", "Rejected", "var(--danger-fg)"],
+        ["NL91 ABNA 0417 1643 00", "EUR", "153,600.00", "ABN AMRO Bank", "2026-08-31", "Pending", "#fbbf24"],
+        ["IE29 AIBK 9311 5212 3456", "EUR", "9,240.75", "AIB Group plc", "2026-08-31", "Confirmed", "#4ade80"]
+      ].map((r, i) => ({
+        n: String(i + 1).padStart(2, "0"),
+        account: r[0], ccy: r[1], amount: r[2], corr: r[3], date: r[4], state: r[5], color: r[6]
+      })),
+      details: [
+        { label: "On behalf of", value: "Nordic Retail Group AB" },
+        { label: "Initiated by", value: "a.lindqvist · Customer Care" },
+        { label: "Group", value: "Billing Operations" },
+        { label: "Rank", value: "Tier 2" },
+        { label: "Sector", value: "Retail · EMEA North" }
+      ],
+      closePanel: () => this.setState({ panel: null }),
+      rail,
+      attachments: [
+        { ext: "PDF", name: "july-statement.pdf", meta: "412 KB · a.lindqvist · 21 Aug" },
+        { ext: "PNG", name: "charge-screenshot.png", meta: "88 KB · a.lindqvist · 21 Aug" },
+        { ext: "CSV", name: "processor-log-0712.csv", meta: "6 KB · system · 22 Aug" }
+      ],
+      comments: [
+        { author: "m.okafor", ts: "22 Aug 16:42", body: "Processor log confirms two captures for the same auth. Requesting the statement to rule out a third-party charge." },
+        { author: "a.lindqvist", ts: "22 Aug 18:07", body: "Statement attached. The second charge posted the next morning." },
+        { author: "d.reyes", ts: "23 Aug 08:01", body: "Clear duplicate — approving full reversal under BIL-14.2." },
+        { author: "system", ts: "23 Aug 11:20", body: "Refund of $248.00 submitted to original payment method." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
